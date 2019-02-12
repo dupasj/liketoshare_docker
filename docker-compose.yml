@@ -1,0 +1,17 @@
+version: '3.3'
+services:
+  php:
+    build: ./php/
+    container_name: php_liketoshare
+    links:
+      - mysql
+  apache:
+    build: ./apache/
+    container_name: apache_liketoshare
+    links:
+      - php
+    depends_on:
+      - php
+  mysql:
+    build: ./mysql/
+    container_name: mysql_liketoshare
