@@ -5,13 +5,19 @@ services:
     container_name: php_liketoshare
     links:
       - mysql
+    ports:
+      - 9000:9000
   apache:
     build: ./apache/
     container_name: apache_liketoshare
     links:
-      - php
+      - php:php
+    ports:
+      - 8080:8080
     depends_on:
       - php
   mysql:
+    ports:
+      - 3306:3306
     build: ./mysql/
     container_name: mysql_liketoshare
