@@ -6,18 +6,22 @@ services:
     links:
       - mysql
     ports:
-      - 9000:9000
+      - "9000:9000"
   apache:
     build: ./apache/
     container_name: apache_liketoshare
     links:
       - php:php
     ports:
-      - 8080:8080
+      - "8080:8080"
     depends_on:
       - php
   mysql:
-    ports:
-      - 3306:3306
     build: ./mysql/
+    command: --default-authentification-plugin=mysql_native_password
+    restart: always
     container_name: mysql_liketoshare
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_ENVIRONNEMENT_PASSWORD: root
