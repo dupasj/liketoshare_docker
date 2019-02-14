@@ -1,27 +1,30 @@
-version: '3.3'
+version: '3.7'
 services:
-  php:
-    build: ./php/
-    container_name: php_liketoshare
-    links:
-      - mysql
-    ports:
-      - "9000:9000"
   apache:
-    build: ./apache/
-    container_name: apache_liketoshare
+    build: ./apache
+    container_name: liketoshare_apache
+    hostname: liketoshare_apache
+    ports:
+      - '80:80'
+      - '443:443'
     links:
-      - php:php
-    ports:
-      - "8080:8080"
-    depends_on:
-      - php
+      - 'php:php'
+    volumes:
+      - './src:/var/www/html'
+      - './apache/config:/usr/local/apache2/conf/extra'
+  php:
+    build: ./php
+    container_name: liketoshare_php
+    hostname: liketoshare_php
+    links:
+      - 'mysql:mysql'
+    volumes:
+      - './src:/var/www/html'
   mysql:
-    build: ./mysql/
-    command: --default-authentification-plugin=mysql_native_password
-    restart: always
-    container_name: mysql_liketoshare
+    build: ./mysql
+    container_name: liketoshare_mysql
+    hostname: liketoshare_mysql
     ports:
-      - "3306:3306"
+      - '3306:3306'
     environment:
-      MYSQL_ENVIRONNEMENT_PASSWORD: root
+      - MYSQL_ROOT_PASSWORD=root
